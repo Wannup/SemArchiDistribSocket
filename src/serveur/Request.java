@@ -23,11 +23,13 @@ public class Request {
 		try {
 			in = new BufferedReader(new InputStreamReader(mySocket.getInputStream()));
 			String MethodLine = in.readLine();
-			dataHeader.put("METHOD", MethodLine.split(" ")[0]);
-			dataHeader.put("Ressource", MethodLine.split(" ")[1]);
+			if(MethodLine != null){
+				dataHeader.put("METHOD", MethodLine.split(" ")[0]);
+				dataHeader.put("Ressource", MethodLine.split(" ")[1]);
 
-			String HostLine = in.readLine();
-			dataHeader.put("Host", HostLine.split(" ")[1]);
+				String HostLine = in.readLine();
+				dataHeader.put("Host", HostLine.split(" ")[1]);
+			}
 			//in.close();
 		} catch (IOException e) {
 			e.printStackTrace();

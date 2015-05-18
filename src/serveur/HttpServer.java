@@ -78,8 +78,10 @@ public class HttpServer {
 			String cle = it.next();
 			Map<String, String> valeur = configs.get(cle);
 			
-			if(valeur.get("name").equals(host.split(":")[0])){
-				return valeur.get("document_root");
+			if(host != null){
+				if(valeur.get("name").equals(host.split(":")[0])){
+					return valeur.get("document_root");
+				}
 			}
 		}
 		return null;
@@ -92,8 +94,9 @@ public class HttpServer {
 			out = requete.getWritter();
 			out.println("");
 			String racineRepo = getRepoRacineByHost(requete.getHost());
-	        out.println(listeRepertoire(configs.get("0").get("document_root"), new File(racineRepo + requete.getRelativeUrl())));
-	        
+			if(racineRepo != null)
+				out.println(listeRepertoire(configs.get("0").get("document_root"), new File(racineRepo + requete.getRelativeUrl())));
+			
 	        out.flush();
 	        out.close();
 		} catch (IOException e) {
