@@ -92,7 +92,7 @@ public class HttpServer {
 			out = requete.getWritter();
 			out.println("");
 			String racineRepo = getRepoRacineByHost(requete.getHost());
-	        out.println(listeRepertoire(new File(racineRepo + requete.getRelativeUrl())));
+	        out.println(listeRepertoire(configs.get("0").get("document_root"), new File(racineRepo + requete.getRelativeUrl())));
 	        
 	        out.flush();
 	        out.close();
@@ -104,18 +104,18 @@ public class HttpServer {
 		
 	}
 	
-	public static String listeRepertoire ( File repertoire ) {
-        System.out.println ( repertoire.getAbsolutePath());
- 
+	public static String listeRepertoire (String root, File repertoire ) {
+        //System.out.println (repertoire.getAbsolutePath());
+        //System.out.println (repertoire.getPath());
         String result = "<!DOCTYPE html><html><head></head><body>";
-        
+
         if ( repertoire.isDirectory ( ) ) {
             File[] list = repertoire.listFiles();
             if (list != null){
                 for ( int i = 0; i < list.length; i++) {
-                    listeRepertoire(list[i]);
+                    listeRepertoire(root, list[i]);
                     if(list[i].isDirectory()){
-                    	result += "<a href=\"" + list[i].getName() + "\">" + list[i].getName() + "<a></br>";
+                    	result += "<a href=\"" + list[i].getPath().substring(root.length(),list[i].getPath().length()) + "\">" + list[i].getName() + "<a></br>";
                     } else {
                     	if(list[i].getName().equals("index.html")){
                     		result = "<!DOCTYPE html><html><head></head><body>";                       		
@@ -129,7 +129,7 @@ public class HttpServer {
                     		} 	                        		
                     		break;
                     	}else{
-                    		result += list[i].getName() + "</br>";
+                    		result += "<a href=\"" + list[i].getPath().substring(root.length(),list[i].getPath().length()) + "\">" + list[i].getName() + "<a></br>";
                     	}
                     }
                 } 
