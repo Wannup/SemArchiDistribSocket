@@ -48,7 +48,7 @@ public class HttpServer {
 
 		this.Port = port;
 
-		// r�cup�ration donn�es config.ini
+		// récupération données config.ini
 		Map<String, String> configFileIni = Ini.load("config.ini");
 
 		Set<String> cles = configFileIni.keySet();
@@ -99,7 +99,7 @@ public class HttpServer {
                 for ( int i = 0; i < list.length; i++) {
                     listeRepertoire(list[i]);
                     if(list[i].isDirectory()){
-                    	result += "<a href=\"" + list[i] + "\">" + list[i].getName() + "<a></br>";
+                    	result += "<a href=\"" + list[i].getName() + "\">" + list[i].getName() + "<a></br>";
                     } else {
                     	if(list[i].getName().equals("index.html")){
                     		result = "<!DOCTYPE html><html><head></head><body>";                       		

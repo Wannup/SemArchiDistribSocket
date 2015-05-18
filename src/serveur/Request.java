@@ -28,7 +28,7 @@ public class Request {
 
 			String HostLine = in.readLine();
 			dataHeader.put("Host", HostLine.split(" ")[1]);
-			in.close();
+			//in.close();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
