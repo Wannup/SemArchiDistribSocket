@@ -2,8 +2,10 @@ package serveur;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.HashMap;
@@ -46,7 +48,7 @@ public class HttpServer {
 
 		this.Port = port;
 
-		// récupération données config.ini
+		// rï¿½cupï¿½ration donnï¿½es config.ini
 		Map<String, String> configFileIni = Ini.load("config.ini");
 
 		Set<String> cles = configFileIni.keySet();
@@ -67,6 +69,63 @@ public class HttpServer {
 			}
 		}
 	}
+	
+	public void execute(Request requete){
+		
+		PrintWriter out;
+		try {
+			out = requete.getWritter();
+			out.println("");
+	        out.println(listeRepertoire(new File(configs.get("0").get("document_root") + requete.getRelativeUrl())));
+	        
+	        out.flush();
+	        out.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+	}
+	
+	public static String listeRepertoire ( File repertoire ) {
+        System.out.println ( repertoire.getAbsolutePath());
+ 
+        String result = "<!DOCTYPE html><html><head></head><body>";
+        
+        if ( repertoire.isDirectory ( ) ) {
+            File[] list = repertoire.listFiles();
+            if (list != null){
+                for ( int i = 0; i < list.length; i++) {
+                    listeRepertoire(list[i]);
+                    if(list[i].isDirectory()){
+                    	result += "<a href=\"" + list[i] + "\">" + list[i].getName() + "<a></br>";
+                    } else {
+                    	if(list[i].getName().equals("index.html")){
+                    		result = "<!DOCTYPE html><html><head></head><body>";                       		
+                    		try (BufferedReader br = new BufferedReader(new FileReader(list[i]))){                  
+                    			String sCurrentLine;                         
+                    			while ((sCurrentLine = br.readLine()) != null) {
+                    				result += sCurrentLine;
+                    			}
+                    		} catch (IOException e) {
+                    			e.printStackTrace();
+                    		} 	                        		
+                    		break;
+                    	}else{
+                    		result += list[i].getName() + "</br>";
+                    	}
+                    }
+                } 
+            } else {
+            	System.err.println(repertoire + " : Erreur de lecture.");
+            }
+        }
+        
+        result += "</body></html>";
+        
+        return result;
+	} 
 
 	class Accepter_clients implements Runnable {
 
@@ -84,7 +143,7 @@ public class HttpServer {
 					socket = socketserver.accept(); 
 												
 					Request requete = new Request(socket);	
-
+					execute(requete);
 				
 					socket.close();
 				}

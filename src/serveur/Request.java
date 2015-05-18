@@ -34,19 +34,19 @@ public class Request {
 		}
 	}
 	
-	private String getRelativeUrl(){
+	public String getRelativeUrl(){
 		return getHeader("Ressource");
 	}
 	
-	private String getHost(){
+	public String getHost(){
 		return getHeader("Host");
 	}
 	
-	private String getHeader(String header){
+	public String getHeader(String header){
 		return dataHeader.get(header);
 	}
 	
-	private Writer getWritter() throws IOException{
+	public PrintWriter getWritter() throws IOException{
 		return new PrintWriter(new BufferedWriter(new OutputStreamWriter(mySocket.getOutputStream())));
 	}
 	
