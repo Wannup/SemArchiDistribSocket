@@ -70,13 +70,29 @@ public class HttpServer {
 		}
 	}
 	
+    private String getRepoRacineByHost(String host){
+    	Set<String> cles = configs.keySet();
+		Iterator<String> it = cles.iterator();
+
+		while (it.hasNext()) {
+			String cle = it.next();
+			Map<String, String> valeur = configs.get(cle);
+			
+			if(valeur.get("name").equals(host.split(":")[0])){
+				return valeur.get("document_root");
+			}
+		}
+		return null;
+    }
+    
 	public void execute(Request requete){
 		
 		PrintWriter out;
 		try {
 			out = requete.getWritter();
 			out.println("");
-	        out.println(listeRepertoire(new File(configs.get("0").get("document_root") + requete.getRelativeUrl())));
+			String racineRepo = getRepoRacineByHost(requete.getHost());
+	        out.println(listeRepertoire(new File(racineRepo + requete.getRelativeUrl())));
 	        
 	        out.flush();
 	        out.close();
