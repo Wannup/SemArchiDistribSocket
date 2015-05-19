@@ -160,11 +160,11 @@ public class HttpServer {
 			try {
 				while (true) {
 					socket = socketserver.accept(); 
-					//System.out.println("user connected");				
+					System.out.println("user connected to httpServer");				
 					Request requete = new Request(socket);	
 					
 					execute(requete);
-					System.out.println("test");
+					
 					//socket.close();
 				}
 
